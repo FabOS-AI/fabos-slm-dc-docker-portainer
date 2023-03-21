@@ -43,23 +43,23 @@
         - "8000"
         - "9000"
 
-    - name: "Remove portainer's data folder"
-      ansible.windows.win_file:
-        state: absent
-        path: "{{ portainer_password_file_path }}/data"
-
     - name: docker-compose down (Windows)
       ansible.windows.win_command: docker compose down -v --remove-orphans
       args:
-        chdir: "{{ portainer_password_file_path }}"
+        chdir: "{{ portainer_password_file_path_win }}"
       register: docker_compose
       retries: 5
       delay: 5
       until: docker_compose.failed == false
 
+    - name: "Remove portainer's data folder"
+      ansible.windows.win_file:
+        state: absent
+        path: "{{ portainer_password_file_path_win }}/data"
+
     - name: Remove docker-compose file
       ansible.windows.win_file:
         state: absent
-        path: "{{ portainer_password_file_path }}/docker-compose.yml"
+        path: "{{ portainer_password_file_path_win }}/docker-compose.yml"
 
 
