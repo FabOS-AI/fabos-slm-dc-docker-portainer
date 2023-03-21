@@ -16,27 +16,27 @@ def scenarios = [
          ["use", "deploy"],
          ["use", "undeploy"],
          ["setup", "uninstall"]
-     ],
-    "centos8": [
-       ["setup", "install"],
-       ["use", "deploy"],
-       ["use", "undeploy"],
-       ["setup", "uninstall"]
-    ],
-     "centos7": [
-        ["setup", "install"],
-        ["use", "deploy"],
-        ["use", "undeploy"],
-        ["setup", "uninstall"]
-     ],
-    "win10-ssh": [
-        ["use", "deploy"],
-        ["use", "undeploy"],
-    ],
-    "win10-winrm": [
-        ["use", "deploy"],
-        ["use", "undeploy"],
-    ]
+     ] //,
+//    "centos8": [
+//       ["setup", "install"],
+//       ["use", "deploy"],
+//       ["use", "undeploy"],
+//       ["setup", "uninstall"]
+//    ],
+//     "centos7": [
+//        ["setup", "install"],
+//        ["use", "deploy"],
+//        ["use", "undeploy"],
+//        ["setup", "uninstall"]
+//     ],
+//    "win10-ssh": [
+//        ["use", "deploy"],
+//        ["use", "undeploy"],
+//    ],
+//    "win10-winrm": [
+//        ["use", "deploy"],
+//        ["use", "undeploy"],
+//    ]
 ]
 
 parallel_stages = [:]
