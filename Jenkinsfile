@@ -28,11 +28,13 @@ def scenarios = [
         ["use", "deploy"],
         ["use", "undeploy"],
         ["setup", "uninstall"]
-     ] //,
-//    "win10-ssh": [
-//        ["use", "deploy"],
-//        ["use", "undeploy"],
-//    ],
+     ],
+    "win10-ssh": [
+        ["setup", "install"],
+        ["use", "deploy"],
+        ["use", "undeploy"],
+        ["setup", "uninstall"]
+    ]//,
 //    "win10-winrm": [
 //        ["use", "deploy"],
 //        ["use", "undeploy"],
