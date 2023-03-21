@@ -9,6 +9,8 @@
       password: "{{ portainer_admin_password }}"
     validate_certs: false
   register: get_jwt_token_response
+  until: not get_jwt_token_response.failed
+  retries: 30
 
 - name: Delegate Facts
   set_fact:
