@@ -1,0 +1,43 @@
+---
+- name: Get jwt token
+  ansible.builtin.uri:
+    url: "http://{{ ansible_host }}:9000/api/auth"
+    method: POST
+    body_format: json
+    body:
+      username: "admin"
+      password: "password"
+    validate_certs: false
+  register: get_jwt_token_response
+
+- name: Get endpoints
+  ansible.builtin.uri:
+    url: "http://{{ ansible_host }}:9000/api/endpoints?name=primary"
+    method: GET
+    headers:
+      Authorization: "Bearer {{ get_jwt_token_response.json.jwt }}"
+  register: get_endpoints_result
+
+- name: Set Primary endpoint var
+  ansible.builtin.set_fact:
+    portainer_endpoint: "{{ get_endpoints_result.json | first }}"
+
+- name: Set docker-compose string
+  ansible.builtin.set_fact:
+    docker_compose_string: "{{ docker_compose_file | to_yaml | string }}"
+
+- name: Create docker-compose stack
+  ansible.builtin.uri:
+    url: "http://{{ ansible_host }}:9000/api/stacks?type=2&method=string&endpointId={{ portainer_endpoint.Id }}"
+    method: POST
+    headers:
+      Authorization: "Bearer {{ get_jwt_token_response.json.jwt }}"
+    body_format: json
+    body:
+      fromAppTemplate: false
+      name: "{{ service_id }}"
+      stackFileContent: "{{ docker_compose_string }}"
+    status_code: [200, 409]
+  register: create_stack_response
+  changed_when: create_stack_response.status == 200
+

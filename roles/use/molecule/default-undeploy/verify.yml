@@ -1,0 +1,49 @@
+---
+# This is an example playbook to execute Ansible tests.
+- name: Verify
+  hosts: all
+  connection: local
+  gather_facts: no
+  become: no
+  vars:
+    ansible_connection: local
+  tasks:
+    - name: Get jwt token
+      ansible.builtin.uri:
+        url: "http://{{ ansible_host }}:9000/api/auth"
+        method: POST
+        body_format: json
+        body:
+          username: "admin"
+          password: "password"
+        validate_certs: false
+      register: get_jwt_token_response
+
+    - name: Get endpoints
+      ansible.builtin.uri:
+        url: "http://{{ ansible_host }}:9000/api/endpoints?name=primary"
+        method: GET
+        headers:
+          Authorization: "Bearer {{ get_jwt_token_response.json.jwt }}"
+      register: get_endpoints_result
+
+    - name: Set Primary endpoint var
+      ansible.builtin.set_fact:
+        portainer_endpoint: "{{ get_endpoints_result.json | first }}"
+
+    - name: Get Stacks
+      ansible.builtin.uri:
+        url: "http://{{ ansible_host }}:9000/api/stacks"
+        method: GET
+        headers:
+          Authorization: "Bearer {{ get_jwt_token_response.json.jwt }}"
+      register: get_stacks_result
+
+    - name: Set Stacks var
+      ansible.builtin.set_fact:
+        stacks: "{{ get_stacks_result.json }}"
+
+    - name: Assert stacks.length == 1 and name of stack equals service_id
+      ansible.builtin.assert:
+        that:
+          - stacks | length == 0

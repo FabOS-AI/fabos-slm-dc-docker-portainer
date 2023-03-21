@@ -1,0 +1,51 @@
+---
+- name: Get jwt token
+  ansible.builtin.uri:
+    url: "http://{{ ansible_host }}:9000/api/auth"
+    method: POST
+    body_format: json
+    body:
+      username: "admin"
+      password: "password"
+    validate_certs: false
+  register: get_jwt_token_response
+
+- name: Get endpoints
+  ansible.builtin.uri:
+    url: "http://{{ ansible_host }}:9000/api/endpoints?name=primary"
+    method: GET
+    headers:
+      Authorization: "Bearer {{ get_jwt_token_response.json.jwt }}"
+  register: get_endpoints_result
+
+- name: Set Primary endpoint var
+  ansible.builtin.set_fact:
+    portainer_endpoint: "{{ get_endpoints_result.json | first }}"
+
+- name: Get Stacks
+  ansible.builtin.uri:
+    url: "http://{{ ansible_host }}:9000/api/stacks"
+    method: GET
+    headers:
+      Authorization: "Bearer {{ get_jwt_token_response.json.jwt }}"
+  register: get_stacks_result
+
+- name: Set Stacks var
+  ansible.builtin.set_fact:
+    stacks: "{{ get_stacks_result.json }}"
+
+- name: Get Stack
+  ansible.builtin.set_fact:
+    stack: "{{ stacks | selectattr('Name', '==', service_id) | first }}"
+  ignore_errors: true
+
+- name: Delete Stack
+  when: stack is defined
+  ansible.builtin.uri:
+    url: "http://{{ ansible_host }}:9000/api/stacks/{{ stack.Id }}?endpointId={{ portainer_endpoint.Id }}"
+    method: DELETE
+    headers:
+      Authorization: "Bearer {{ get_jwt_token_response.json.jwt }}"
+    status_code: [200, 204]
+  register: delete_stack_return
+  changed_when: delete_stack_return.status == 204

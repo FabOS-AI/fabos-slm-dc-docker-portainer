@@ -1,0 +1,16 @@
+---
+- name: Converge - Uninstall
+  hosts: all
+  gather_facts: yes
+  become: yes
+  vars:
+    state: absent
+  tasks:
+    - name: "Include docker - install"
+      ansible.builtin.include_role:
+        name: "docker"
+
+    - name: "Include docker_portainer - setup"
+      ansible.builtin.include_role:
+        name: "setup"
+

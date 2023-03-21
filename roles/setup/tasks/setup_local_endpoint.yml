@@ -1,0 +1,33 @@
+---
+- name: Get jwt token
+  ansible.builtin.uri:
+    url: "http://{{ ansible_host }}:9000/api/auth"
+    method: POST
+    body_format: json
+    body:
+      username: "admin"
+      password: "{{ portainer_admin_password }}"
+    validate_certs: false
+  register: get_jwt_token_response
+
+- name: Delegate Facts
+  set_fact:
+    portainer_jwt: "{{ get_jwt_token_response.json.jwt }}"
+
+- name: Create local endpoint
+  ansible.builtin.uri:
+    url: "http://{{ ansible_host }}:9000/api/endpoints"
+    method: POST
+    headers:
+      Authorization: "Bearer {{ get_jwt_token_response.json.jwt }}"
+    body_format: form-urlencoded
+    body:
+      EndpointCreationType: 1
+      Name: local
+      URL: npipe:////./pipe/docker_engine
+    validate_certs: false
+  register: post_endpoint_response
+  changed_when: post_endpoint_response.status == 200
+  failed_when:
+    - post_endpoint_response.status != 200
+    - post_endpoint_response.json.message | default("") != "Name is not unique"
