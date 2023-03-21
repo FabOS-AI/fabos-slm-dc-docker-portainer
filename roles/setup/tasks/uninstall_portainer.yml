@@ -1,5 +1,5 @@
 ---
-- name: Install Portainer on Linux
+- name: Uninstall Portainer on Linux
   when: ansible_os_family != "Windows"
   block:
     - name: "Remove iptable rule for portainer ports"
@@ -27,3 +27,39 @@
         state: directory
         mode: 644
         recurse: yes
+
+- name: Uninstall Portainer on Windows
+  when: ansible_os_family == "Windows"
+  block:
+    - name: "Remove firewall rule for ports"
+      community.windows.win_firewall_rule:
+        name: "Portainer - {{ item }}"
+        localport: "{{ item }}"
+        action: allow
+        direction: in
+        protocol: tcp
+        state: absent
+      loop:
+        - "8000"
+        - "9000"
+
+    - name: "Remove portainer's data folder"
+      ansible.windows.win_file:
+        state: absent
+        path: "{{ portainer_password_file_path }}/data"
+
+    - name: docker-compose down (Windows)
+      ansible.windows.win_command: docker compose down -v --remove-orphans
+      args:
+        chdir: "{{ portainer_password_file_path }}"
+      register: docker_compose
+      retries: 5
+      delay: 5
+      until: docker_compose.failed == false
+
+    - name: Remove docker-compose file
+      ansible.windows.win_file:
+        state: absent
+        path: "{{ portainer_password_file_path }}/docker-compose.yml"
+
+
