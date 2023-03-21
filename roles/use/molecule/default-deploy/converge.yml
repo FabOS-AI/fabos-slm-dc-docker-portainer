@@ -6,6 +6,7 @@
   become: yes
   vars:
     ansible_connection: local
+    ansible_shell_type: sh
   tasks:
     - name: Include vars file
       ansible.builtin.include_vars:
