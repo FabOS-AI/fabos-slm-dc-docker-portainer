@@ -43,7 +43,13 @@
         - "8000"
         - "9000"
 
+    - name: Get infos about docker-compose file
+      ansible.windows.win_stat:
+        path: "{{ portainer_password_file_path_win }}\\docker-compose.yml"
+      register: compose_file_info
+
     - name: docker-compose down (Windows)
+      when: compose_file_info.stat.exists
       ansible.windows.win_command: docker compose down -v --remove-orphans
       args:
         chdir: "{{ portainer_password_file_path_win }}"
