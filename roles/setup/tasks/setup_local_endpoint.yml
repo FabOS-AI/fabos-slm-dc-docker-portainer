@@ -25,7 +25,7 @@
     body_format: form-urlencoded
     body:
       EndpointCreationType: 1
-      Name: local
+      Name: primary
       URL: npipe:////./pipe/docker_engine
     validate_certs: false
   register: post_endpoint_response
