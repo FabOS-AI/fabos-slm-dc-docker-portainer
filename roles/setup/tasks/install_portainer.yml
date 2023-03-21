@@ -20,7 +20,13 @@
         portainer_password_file_path: "{{ portainer_password_file_path_linux }}"
         portainer_local_endpoint_url: "{{ portainer_local_endpoint_url_linux }}"
 
+    - name: "Get stat of portainer's data folder"
+      ansible.builtin.stat:
+        path: "{{ portainer_password_file_path }}/data"
+      register: stat_data_folder
+
     - name: "Create portainer's data folder"
+      when: not stat_data_folder.stat.exists
       ansible.builtin.file:
         path: "{{ portainer_password_file_path }}/data"
         state: directory
