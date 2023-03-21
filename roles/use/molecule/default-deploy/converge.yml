@@ -12,9 +12,10 @@
       ansible.builtin.include_vars:
         file: ./vars/main.yml
 
-    - ansible.builtin.set_fact:
+    - name: Set windows specific docker-compose file
+      ansible.builtin.set_fact:
         docker_compose_file: "{{ docker_compose_file_win }}"
-      when: ansible_os_family == "Windows"
+      when: "'win-ssh' in group_names or 'winrm' in group_names"
 
     - name: "Include use - install"
       ansible.builtin.include_role:
