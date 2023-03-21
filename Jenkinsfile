@@ -16,19 +16,19 @@ def scenarios = [
          ["use", "deploy"],
          ["use", "undeploy"],
          ["setup", "uninstall"]
+     ],
+    "centos8": [
+       ["setup", "install"],
+       ["use", "deploy"],
+       ["use", "undeploy"],
+       ["setup", "uninstall"]
+    ],
+     "centos7": [
+        ["setup", "install"],
+        ["use", "deploy"],
+        ["use", "undeploy"],
+        ["setup", "uninstall"]
      ] //,
-//    "centos8": [
-//       ["setup", "install"],
-//       ["use", "deploy"],
-//       ["use", "undeploy"],
-//       ["setup", "uninstall"]
-//    ],
-//     "centos7": [
-//        ["setup", "install"],
-//        ["use", "deploy"],
-//        ["use", "undeploy"],
-//        ["setup", "uninstall"]
-//     ],
 //    "win10-ssh": [
 //        ["use", "deploy"],
 //        ["use", "undeploy"],
