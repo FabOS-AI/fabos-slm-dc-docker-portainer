@@ -39,5 +39,7 @@
       stackFileContent: "{{ docker_compose_string }}"
     status_code: [200, 409]
   register: create_stack_response
+  until: not create_stack_response.failed
+  retries: 5
   changed_when: create_stack_response.status == 200
 
