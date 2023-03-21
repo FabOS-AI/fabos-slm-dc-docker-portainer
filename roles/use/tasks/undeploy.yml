@@ -46,6 +46,6 @@
     method: DELETE
     headers:
       Authorization: "Bearer {{ get_jwt_token_response.json.jwt }}"
-    status_code: [200, 204]
+    status_code: [200, 204, 404]
   register: delete_stack_return
   changed_when: delete_stack_return.status == 204
