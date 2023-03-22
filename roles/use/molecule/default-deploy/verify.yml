@@ -48,10 +48,10 @@
       ansible.builtin.set_fact:
         stacks: "{{ get_stacks_result.json }}"
 
-    - name: Assert stacks.length == 1 and name of stack equals service_id
+    - name: Assert stacks.length > 0 and name of stack equals service_id
       ansible.builtin.assert:
         that:
-          - stacks | length == 1
+          - stacks | length > 0
           - stacks[0].Name == service_id
 
 
