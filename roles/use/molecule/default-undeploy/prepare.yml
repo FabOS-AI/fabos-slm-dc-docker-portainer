@@ -4,7 +4,12 @@
   gather_facts: yes
   become: yes
   tasks:
+    - name: Check if windows host
+      ansible.builtin.set_fact:
+        is_win_host: "{{ 'win-ssh' in group_names or 'winrm' in group_names }}"
+
     - name: "Include docker - install"
+      when: not is_win_host
       ansible.builtin.include_role:
         name: "docker"
 
