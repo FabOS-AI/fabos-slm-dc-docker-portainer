@@ -12,7 +12,22 @@
       ansible.builtin.include_role:
         name: "setup"
 
-- name: Prepare
+- name: Prepare - Setup Portainer
+  hosts: all
+  connection: local
+  gather_facts: no
+  become: no
+  vars:
+    ansible_connection: local
+    ansible_shell_type: sh
+  tasks:
+    - name: Include setup_local_endpoint
+      when: ansible_os_family == "Windows"
+      ansible.builtin.include_role:
+        name: setup
+        tasks_from: setup_local_endpoint.yml
+
+- name: Prepare - Deploy Services
   hosts: all
   connection: local
   gather_facts: no
