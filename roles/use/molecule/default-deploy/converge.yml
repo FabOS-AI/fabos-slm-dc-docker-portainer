@@ -2,7 +2,7 @@
 - name: Converge
   hosts: all
   connection: local
-  gather_facts: yes
+  gather_facts: no
   become: no
   vars:
     ansible_connection: local
