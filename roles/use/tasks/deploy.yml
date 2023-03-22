@@ -26,7 +26,25 @@
   ansible.builtin.set_fact:
     docker_compose_string: "{{ docker_compose_file | to_yaml | string }}"
 
+- name: Get Stacks
+  ansible.builtin.uri:
+    url: "http://{{ ansible_host }}:9000/api/stacks"
+    method: GET
+    headers:
+      Authorization: "Bearer {{ get_jwt_token_response.json.jwt }}"
+  register: get_stacks_result
+
+- name: Set Stacks var
+  ansible.builtin.set_fact:
+    stacks: "{{ get_stacks_result.json }}"
+
+- name: Get Stack
+  ansible.builtin.set_fact:
+    stack: "{{ stacks | selectattr('Name', '==', service_id) | first | default([]) }}"
+  ignore_errors: true
+
 - name: Create docker-compose stack
+  when: stack | length == 0
   ansible.builtin.uri:
     url: "http://{{ ansible_host }}:9000/api/stacks?type=2&method=string&endpointId={{ portainer_endpoint.Id }}"
     method: POST
