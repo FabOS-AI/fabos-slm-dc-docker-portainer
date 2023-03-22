@@ -36,15 +36,16 @@
 
 - name: Get Stack
   ansible.builtin.set_fact:
-    stack: "{{ stacks | selectattr('Name', '==', service_id) | first | default([]) }}"
+    stack: "{{ stacks | selectattr('Name', '==', service_id) | default([]) }}"
 
 - name: Delete Stack
   when: stack | length > 0
   ansible.builtin.uri:
-    url: "http://{{ ansible_host }}:9000/api/stacks/{{ stack.Id }}?endpointId={{ portainer_endpoint.Id }}"
+    url: "http://{{ ansible_host }}:9000/api/stacks/{{ item.Id }}?endpointId={{ portainer_endpoint.Id }}"
     method: DELETE
     headers:
       Authorization: "Bearer {{ get_jwt_token_response.json.jwt }}"
     status_code: [200, 204, 404]
   register: delete_stack_return
   changed_when: delete_stack_return.status == 204
+  loop: "{{ stack }}"
