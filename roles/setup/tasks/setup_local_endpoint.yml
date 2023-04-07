@@ -10,7 +10,7 @@
     body_format: json
     body:
       username: "admin"
-      password: "{{ portainer_admin_password | default({portainer_admin_password_default}) }}"
+      password: "{{ portainer_admin_password | default(portainer_admin_password_default) }}"
     validate_certs: false
   register: get_jwt_token_response
   until: not get_jwt_token_response.failed
