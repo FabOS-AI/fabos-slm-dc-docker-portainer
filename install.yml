@@ -8,8 +8,8 @@
       ansible.builtin.include_role:
         name: inventory_helper
 
-- name: Install docker (ssh)
-  hosts: ssh
+- name: Install docker and portainer
+  hosts: all
   gather_facts: yes
   become: yes
   tasks:
