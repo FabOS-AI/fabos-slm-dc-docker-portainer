@@ -14,7 +14,7 @@
         state: absent
       with_items:
         - "8000"
-        - "9000"
+        - "{{ portainer_port | default(portainer_port_default) }}"
 
     - name: Set Portainer Password File Path
       ansible.builtin.set_fact:
@@ -41,7 +41,7 @@
         state: absent
       loop:
         - "8000"
-        - "9000"
+        - "{{ portainer_port | default(portainer_port_default) }}"
 
     - name: Get infos about docker-compose file
       ansible.windows.win_stat:
