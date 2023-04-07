@@ -17,7 +17,7 @@
       ansible.builtin.include_role:
         name: "setup"
 
-- name: Setup Portainer
+- name: Setup Portainer (Windows-only)
   hosts: all
   connection: local
   gather_facts: no
