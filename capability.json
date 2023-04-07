@@ -1,7 +1,7 @@
 {
   "capabilityClass": "DeploymentCapability",
   "name": "Portainer",
-  "logo": "mdi-docker",
+  "logo": "mdi-alpha-p",
   "type": [
     "SETUP",
     "DEPLOY"
