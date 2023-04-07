@@ -14,11 +14,11 @@
   become: yes
   tasks:
     - name: Gather facts (Linux)
-      when: 'ssh' in group_names
+      when: "'ssh' in group_names"
       ansible.builtin.setup:
 
     - name: Gather facts (Windows)
-      when: not 'ssh' in group_names
+      when: "not 'ssh' in group_names"
       ansible.windows.setup:
 
 
