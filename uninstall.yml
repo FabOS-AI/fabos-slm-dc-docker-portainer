@@ -10,9 +10,18 @@
 
 - name: Converge - Uninstall
   hosts: all
-  gather_facts: yes
+  gather_facts: no
   become: yes
   tasks:
+    - name: Gather facts (Linux)
+      when: 'ssh' in group_names
+      ansible.builtin.setup:
+
+    - name: Gather facts (Windows)
+      when: not 'ssh' in group_names
+      ansible.windows.setup:
+
+
     - name: "Include docker_portainer - setup"
       ansible.builtin.include_role:
         name: "setup"
