@@ -60,7 +60,7 @@
         enabled: yes
       loop:
         - "8000"
-        - "9000"
+        - "{{ portainer_port | default(portainer_port_default) }}"
 
     - name: Set Portainer vars
       ansible.builtin.set_fact:
