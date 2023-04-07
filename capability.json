@@ -1,7 +1,7 @@
 {
   "capabilityClass": "DeploymentCapability",
   "name": "Portainer",
-  "logo": "mdi-alpha-p",
+  "logo": "mdi-alpha-p-box",
   "type": [
     "SETUP",
     "DEPLOY"
