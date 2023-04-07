@@ -1,12 +1,16 @@
 ---
+- name: Set Portainer url
+  ansible.builtin.set_fact:
+    portainer_url: "https://{{ ansible_host }}:{{ portainer_port | default(portainer_port_default) }}"
+
 - name: Get jwt token
   ansible.builtin.uri:
-    url: "http://{{ ansible_host }}:9000/api/auth"
+    url: "{{ portainer_url }}/api/auth"
     method: POST
     body_format: json
     body:
       username: "admin"
-      password: "{{ portainer_admin_password }}"
+      password: "{{ portainer_admin_password | default({portainer_admin_password_default}) }}"
     validate_certs: false
   register: get_jwt_token_response
   until: not get_jwt_token_response.failed
@@ -18,7 +22,7 @@
 
 - name: Create local endpoint
   ansible.builtin.uri:
-    url: "http://{{ ansible_host }}:9000/api/endpoints"
+    url: "{{ portainer_url }}/api/endpoints"
     method: POST
     headers:
       Authorization: "Bearer {{ get_jwt_token_response.json.jwt }}"

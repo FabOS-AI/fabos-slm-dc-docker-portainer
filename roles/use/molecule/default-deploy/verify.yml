@@ -11,25 +11,33 @@
   tasks:
     - name: Include vars file
       ansible.builtin.include_vars:
-        file: ./vars/main.yml
+        file: "{{ item }}"
+      loop:
+        - ./vars/main.yml
+        - ../../../setup/defaults/main.yml
+
+    - name: Set Portainer url
+      ansible.builtin.set_fact:
+        portainer_url: "https://{{ ansible_host }}:{{ portainer_port | default(portainer_port_default) }}"
 
     - name: Get jwt token
       ansible.builtin.uri:
-        url: "http://{{ ansible_host }}:9000/api/auth"
+        url: "{{ portainer_url }}/api/auth"
         method: POST
         body_format: json
         body:
           username: "admin"
-          password: "passwordpassword"
+          password: "{{ portainer_admin_password | default(portainer_admin_password_default) }}"
         validate_certs: false
       register: get_jwt_token_response
 
     - name: Get endpoints
       ansible.builtin.uri:
-        url: "http://{{ ansible_host }}:9000/api/endpoints?name=primary"
+        url: "{{ portainer_url }}/api/endpoints?name=primary"
         method: GET
         headers:
           Authorization: "Bearer {{ get_jwt_token_response.json.jwt }}"
+        validate_certs: false
       register: get_endpoints_result
 
     - name: Set Primary endpoint var
@@ -38,10 +46,11 @@
 
     - name: Get Stacks
       ansible.builtin.uri:
-        url: "http://{{ ansible_host }}:9000/api/stacks"
+        url: "{{ portainer_url }}/api/stacks"
         method: GET
         headers:
           Authorization: "Bearer {{ get_jwt_token_response.json.jwt }}"
+        validate_certs: false
       register: get_stacks_result
 
     - name: Set Stacks var

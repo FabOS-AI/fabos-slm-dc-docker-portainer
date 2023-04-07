@@ -1,5 +1,5 @@
 ---
-- name: Converge
+- name: Converge - deploy
   hosts: all
   connection: local
   gather_facts: no
@@ -10,14 +10,17 @@
   tasks:
     - name: Include vars file
       ansible.builtin.include_vars:
-        file: ./vars/main.yml
+        file: "{{ item }}"
+      loop:
+        - ./vars/main.yml
+        - ../../../setup/defaults/main.yml
 
     - name: Set windows specific docker-compose file
       ansible.builtin.set_fact:
         docker_compose_file: "{{ docker_compose_file_win }}"
       when: "'win-ssh' in group_names or 'winrm' in group_names"
 
-    - name: "Include use - install"
+    - name: "Include use - deploy"
       ansible.builtin.include_role:
         name: "use"
         tasks_from: deploy.yml

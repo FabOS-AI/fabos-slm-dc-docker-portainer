@@ -43,8 +43,11 @@
     ansible_python_interpreter: /usr/bin/python3
   tasks:
     - name: Include vars file
-      include_vars:
-        file: ./vars/main.yml
+      ansible.builtin.include_vars:
+        file: "{{ item }}"
+      loop:
+        - ./vars/main.yml
+        - ../../../setup/defaults/main.yml
 
     - name: Check if windows host
       ansible.builtin.set_fact:
