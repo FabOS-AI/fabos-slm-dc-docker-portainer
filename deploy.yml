@@ -8,7 +8,7 @@
       ansible.builtin.include_role:
         name: inventory_helper
 
-- name: Converge
+- name: Deploy
   hosts: all
   connection: local
   gather_facts: no
@@ -17,7 +17,7 @@
     ansible_connection: local
     ansible_shell_type: sh
   tasks:
-    - name: "Include use - install"
+    - name: "Include use - deploy"
       ansible.builtin.include_role:
         name: "use"
         tasks_from: deploy.yml

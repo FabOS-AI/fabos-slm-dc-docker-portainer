@@ -8,19 +8,19 @@
       ansible.builtin.include_role:
         name: inventory_helper
 
-- name: Undeploy
+- name: Converge
   hosts: all
-  gather_facts: yes
+  connection: local
+  gather_facts: no
   become: no
   vars:
     ansible_connection: local
     ansible_shell_type: sh
   tasks:
-    - name: "Include use - undeploy"
+    - name: "Include use - update"
       ansible.builtin.include_role:
         name: "use"
-        tasks_from: undeploy.yml
+        tasks_from: update.yml
       vars:
         portainer_admin_password: "{{ vault_service_secrets.portainer_password }}"
         portainer_port: "{{ consul_service_meta.service_port }}"
-
