@@ -2,30 +2,35 @@ def scenarios = [
     "ubuntu2204": [
         ["setup", "install"],
         ["use", "deploy"],
+        ["use", "update"],
         ["use", "undeploy"],
         ["setup", "uninstall"]
     ],
     "ubuntu2004": [
         ["setup", "install"],
         ["use", "deploy"],
+        ["use", "update"],
         ["use", "undeploy"],
         ["setup", "uninstall"]
     ],
      "ubuntu1804": [
          ["setup", "install"],
          ["use", "deploy"],
+         ["use", "update"],
          ["use", "undeploy"],
          ["setup", "uninstall"]
      ],
     "centos8": [
        ["setup", "install"],
        ["use", "deploy"],
+       ["use", "update"],
        ["use", "undeploy"],
        ["setup", "uninstall"]
     ],
      "centos7": [
         ["setup", "install"],
         ["use", "deploy"],
+        ["use", "update"],
         ["use", "undeploy"],
         ["setup", "uninstall"]
      ],
