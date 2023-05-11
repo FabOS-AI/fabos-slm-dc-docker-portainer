@@ -1,3 +1,1 @@
-# Ansible Collection - fabos.docker_portainer
-
-Documentation for the collection.
+The Service Lifecycle Management was transferred to the [Eclipse Service Lifecycle Management](https://projects.eclipse.org/projects/dt.slm) project at the Eclipse Foundation. Therefore, this repository was transferred to the new repository [eclipse-slm/slm-dc-docker-portainer](https://github.com/eclipse-slm/slm-dc-docker-portainer) and set to archived.
